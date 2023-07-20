@@ -41,15 +41,20 @@ const FileUpload = () => {
       data.append(file.name, file);
     }
     
-    await axios.post(UPLOAD_URL, data, {
-      onUploadProgress(e) {
-        const progress = e.progress ?? 0;
-        setProgress(progress * 100);
-        if (progress * 100 >= 100) {
-          setFileList(null);
-        }
-      },
-    });
+    try {
+      await axios.post(UPLOAD_URL, data, {
+        onUploadProgress(e) {
+          const progress = e.progress ?? 0;
+          setProgress(progress * 100);
+          if (progress * 100 >= 100) {
+            setFileList(null);
+          }
+        },
+      });
+    } catch (error) {
+      setProgress(0);
+      console.log('error: ', error);
+    }
   };
 
   return (
